@@ -19,6 +19,9 @@ class WizardAdrianPlayerV01(WizardBasePlayer):
         bid += len([c for c in hand if c.card_type == CardType.WIZARD])
         bid += len([c for c in hand if state.trump_suit and c.card_suit == state.trump_suit])
 
+        if state.current_round_number == 20:
+            bid += len([c for c in hand if c.card_value and c.card_value >= 10])
+
         return min(bid, state.current_round_number)
 
     def play_card(self, state: GameState) -> WizardCard:
