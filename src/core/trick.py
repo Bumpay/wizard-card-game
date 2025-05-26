@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import Callable, TYPE_CHECKING
+import logging
 
 from src.core.turn import Turn
 from src.game.wizard_card import WizardCard, CardSuit, CardType
@@ -17,6 +18,7 @@ class Trick:
             trump_suit: CardSuit,
             get_game_state: Callable[[WizardBasePlayer], GameState],
     ):
+        self.logger = logging.getLogger(__name__)
         self._players = players
         self._hands = hands
         self._trump_suit = trump_suit
@@ -39,10 +41,10 @@ class Trick:
             self._trick_cards[player] = card
             if not self._trick_suit and card.card_type == CardType.STANDARD:
                 self._trick_suit = card.card_suit
-            print(f'{player.name}: I play a {card}')
+            self.logger.info(f'{player.name}: I play a {card}')
 
         winner = self.determine_winner()
-        print(f'\nTrick winner: {winner}')
+        self.logger.info(f'\nTrick winner: {winner}')
         return winner
 
     def determine_winner(self) -> WizardBasePlayer:

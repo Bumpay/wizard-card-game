@@ -1,3 +1,5 @@
+import logging
+
 from src.core.player import WizardBasePlayer
 from src.core.deck import Deck
 from src.core.trick import Trick
@@ -13,6 +15,7 @@ class Round:
             players: list[WizardBasePlayer],
             game_state_callback
     ):
+        self.logger = logging.getLogger(__name__)
         self._players: list[WizardBasePlayer] = players
         self._round_number: int = round_number
         self._game_state_callback = game_state_callback
@@ -27,11 +30,11 @@ class Round:
 
     def play(self) -> dict[WizardBasePlayer, int]:
 
-        print(f'\nTrump suit: {self.trump_suit}')
+        self.logger.info(f'\nTrump suit: {self.trump_suit}')
         self.run_bidding_phase()
 
         for i in range(self._round_number):
-            print(f'\nTrick {i + 1} of {self._round_number}')
+            self.logger.info(f'\nTrick {i + 1} of {self._round_number}')
             winner = self.play_trick()
 
             self._won_tricks[winner] += 1
@@ -45,7 +48,7 @@ class Round:
     def run_bidding_phase(self):
         for player in self._players:
             decision = player.make_bid(self._game_state_callback(player))
-            print(f'{player.name}: I bet {decision}')
+            self.logger.info(f'{player.name}: I bet {decision}')
             self._current_bets[player] = decision
 
     def play_trick(self) -> WizardBasePlayer:

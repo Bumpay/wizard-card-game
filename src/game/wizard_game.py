@@ -1,3 +1,4 @@
+import logging
 import random
 from types import MappingProxyType
 
@@ -11,6 +12,7 @@ from src.game.wizard_card_factory import create_wizard_cards
 
 class WizardGame:
     def __init__(self):
+        self.logger = logging.getLogger(__name__)
         self._current_scores: dict[WizardBasePlayer, int] = dict()
         self._deck: Deck = Deck(create_wizard_cards())
         self._players: list[WizardBasePlayer] = list()
@@ -23,7 +25,7 @@ class WizardGame:
             raise Exception('Too many players')
         else:
             self._players.append(player)
-            print(f"Player '{player.name}' added")
+            self.logger.info(f"Player '{player.name}' added")
 
     def start_game(self):
         if not 3 <= len(self._players) <= 6:
@@ -35,14 +37,14 @@ class WizardGame:
 
         self._max_rounds = 60 // len(self._players)
 
-        print(f'\nStart game with {len(self._players)} players. Playing {self._max_rounds} rounds.')
+        self.logger.info(f'\nStart game with {len(self._players)} players. Playing {self._max_rounds} rounds.')
 
         for round_number in range(self._max_rounds):
-            print(f'\nRound {round_number+1}')
+            self.logger.info(f'\nRound {round_number+1}')
             self._play_round(round_number+1)
 
 
-        print(f'\nGame finished')
+        self.logger.info(f'\nGame finished')
         self.end_game()
 
     def _play_round(self, round_number: int):
@@ -53,9 +55,9 @@ class WizardGame:
             self.get_game_state_for_player
         )
 
-        print(f'Round {round_number}: Start bidding')
+        self.logger.info(f'Round {round_number}: Start bidding')
         round_scores = self._current_round.play()
-        print(f'Round {round_number}: End bidding')
+        self.logger.info(f'Round {round_number}: End bidding')
 
         self._current_scores = {
             player: self._current_scores.get(player, 0) + round_scores.get(player, 0)
@@ -65,16 +67,16 @@ class WizardGame:
     def end_game(self):
 
         for player, score in sorted(self._current_scores.items(), key=lambda x: x[1], reverse=True):
-            print(f'{player}: {score}')
+            self.logger.info(f'{player}: {score}')
 
         max_score = max(self._current_scores.values())
 
         winners = [player.name for player, score in self._current_scores.items() if score == max_score]
 
         if len(winners) == 1:
-            print(f'\nWinner: {winners[0]} with score: {max_score}')
+            self.logger.info(f'\nWinner: {winners[0]} with score: {max_score}')
         else:
-            print(f'\nWinners: {", ".join(winners)} with score: {max_score}')
+            self.logger.info(f'\nWinners: {", ".join(winners)} with score: {max_score}')
 
     def get_game_state_for_player(self, player: WizardBasePlayer):
         return GameState.from_game(self, player)
