@@ -34,7 +34,9 @@ class WizardEnvironment:
                 'total_score': 0,
                 'scores': [],
                 'average_position': 0,
-                'positions': []
+                'positions': [],
+                'round_wins': {i: 0 for i in range(1, 21)},  # Track wins for each round 1-20
+                'round_plays': {i: 0 for i in range(1, 21)}  # Track how many times each round was played
             }
             for player_class in player_classes
         }
@@ -69,6 +71,7 @@ class WizardEnvironment:
     def _update_stats(self, game: WizardGame):
         """Update statistics after each game"""
         scores = game.current_scores
+        round_scores = game.round_scores
 
         # Sort players by score to get positions
         sorted_players = sorted(scores.items(), key=lambda x: x[1], reverse=True)
@@ -86,6 +89,11 @@ class WizardEnvironment:
             # Count wins (including ties)
             if score == max_score:
                 stats['wins'] += 1
+
+            for round_num, round_results in round_scores.items():
+                stats['round_plays'][round_num] += 1
+                if round_results[player] == max(round_results.values()):
+                    stats['round_wins'][round_num] += 1
 
     def _calculate_final_stats(self, num_games: int):
         """Calculate final statistics for all players"""
@@ -114,5 +122,15 @@ class WizardEnvironment:
             print("Position Distribution:")
             for pos, freq in enumerate(stats['position_distribution'], 1):
                 print(f"  {pos}th: {freq:.2%}")
+
+            print('\nRound Win Rates:')
+            for round_num in range(1, 21):
+                plays = stats['round_plays'][round_num]
+                wins = stats['round_wins'][round_num]
+                if plays > 0:
+                    win_rate = wins / plays
+                    print(f"  Round {round_num}: {win_rate:.2%} ({wins} / {plays})")
+                else:
+                    print(f"Round {round_num}: No plays")
 
         print("-" * 80)

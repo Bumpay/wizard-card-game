@@ -14,6 +14,7 @@ class WizardGame:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self._current_scores: dict[WizardBasePlayer, int] = dict()
+        self._round_scores = {}
         self._deck: Deck = Deck(create_wizard_cards())
         self._players: list[WizardBasePlayer] = list()
         self._current_round: Round | None = None
@@ -59,6 +60,8 @@ class WizardGame:
         round_scores = self._current_round.play()
         self.logger.info(f'Round {round_number}: End bidding')
 
+        self._round_scores[round_number] = round_scores
+
         self._current_scores = {
             player: self._current_scores.get(player, 0) + round_scores.get(player, 0)
             for player in set(self._current_scores) | set(round_scores)
@@ -92,3 +95,7 @@ class WizardGame:
     @property
     def players(self) -> tuple[WizardBasePlayer, ...]:
         return tuple(self._players)
+
+    @property
+    def round_scores(self):
+        return self._round_scores
