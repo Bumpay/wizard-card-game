@@ -1,6 +1,7 @@
 import random
 from collections import Counter
 
+from src.core.turn import valid_cards
 from src.game.wizard_card import CardSuit, CardType, WizardCard
 from src.core.player import WizardBasePlayer
 
@@ -26,7 +27,7 @@ class WizardSimpleBot(WizardBasePlayer):
             # Trick Winning strategy
             return self._pick_winning_card(hand, trump_suite)
 
-        return hand[0]
+        return valid_cards(list(hand), state.current_trick.trick_cards, state.current_trick.trick_suit)[0]
 
     def pick_trump_suit(self, state) -> CardSuit:
         hand = state.hand
