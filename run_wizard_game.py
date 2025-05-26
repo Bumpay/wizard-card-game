@@ -1,16 +1,14 @@
-from src.game.wizard_game import WizardGame
-from src.ai.base_agent import WizardDebugPlayer
-from src.ai.adrian_agent import WizardAdrianPlayerV01
+from src.ai.debug_agent import WizardDebugPlayer
+from src.ai.simple_agent import WizardSimpleBot
+from src.ai.wizard_environment import WizardEnvironment
 
-def main():
+# Create and run the environment
+env = WizardEnvironment()
+results = env.evaluate_players(
+    player_classes=[WizardSimpleBot, WizardDebugPlayer],
+    num_games=1000,
+    players_per_game=4
+)
 
-    for i in range(100000):
-        game = WizardGame()
-        game.add_player(WizardAdrianPlayerV01('Adrian'))
-        game.add_player(WizardDebugPlayer('Bertha'))
-        game.add_player(WizardDebugPlayer('Chris'))
-        game.start_game()
-
-
-if __name__ == '__main__':
-    main()
+# Print the results
+env.print_results()
