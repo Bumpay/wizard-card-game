@@ -49,7 +49,7 @@ class Trick:
         trick_suite = None
         for player, card in self._trick_cards.items():
 
-            # First wizard card wins the round
+            # The first wizard card wins the round
             if card.card_type == CardType.WIZARD:
                 return player
 
@@ -61,7 +61,7 @@ class Trick:
         if all(card.card_type == CardType.JESTER for card in self._trick_cards.values()):
             return list(self._trick_cards.keys())[0]
 
-        # If trump suited card is in play
+        # If a trump-suited card is in play
         elif self._trump_suit and any(card.card_suit == self._trump_suit for card in self._trick_cards.values()):
             return max(
                 ((player, card) for player, card in self._trick_cards.items()
@@ -69,7 +69,7 @@ class Trick:
                 key=lambda x: x[1].card_value
             )[0]
 
-        # If no trump suited card is in play
+        # If no trump-suited card is in play
         else:
             return max(
                 ((player, card) for player, card in self._trick_cards.items()

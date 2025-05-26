@@ -1,4 +1,5 @@
 import random
+from types import MappingProxyType
 
 from src.core.deck import Deck
 from src.core.player import WizardBasePlayer
@@ -79,13 +80,13 @@ class WizardGame:
         return GameState.from_game(self, player)
 
     @property
-    def current_scores(self):
-        return self._current_scores
+    def current_scores(self) -> MappingProxyType[WizardBasePlayer, int]:
+        return MappingProxyType(self._current_scores)
 
     @property
     def current_round(self) -> Round:
         return self._current_round
 
     @property
-    def players(self):
-        return self._players
+    def players(self) -> tuple[WizardBasePlayer, ...]:
+        return tuple(self._players)

@@ -1,4 +1,4 @@
-from src.core import rotate_players, WizardBasePlayer
+from src.core.player import rotate_players, WizardBasePlayer
 
 
 class DummyPlayer(WizardBasePlayer):

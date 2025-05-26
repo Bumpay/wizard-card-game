@@ -11,18 +11,18 @@ class WizardSimpleBot(WizardBasePlayer):
         hand = state.hand
 
         bid += len([c for c in hand if c.card_type == CardType.WIZARD])
-        bid += len([c for c in hand if c.card_suit == state._trump_suit])
+        bid += len([c for c in hand if c.card_suit == state.trump_suit])
 
         return min(bid, state.current_round_number)
 
     def play_card(self, state) -> WizardCard:
         trick = state.current_trick
-        trick_goal = state._current_bets[self]
-        tricks_won = state._won_tricks[self]
+        trick_goal = state.current_bets[self]
+        tricks_won = state.won_tricks[self]
         hand = state.hand
-        trump_suite = state._trump_suit
+        trump_suite = state.trump_suit
 
-        if len(trick) == 0 and tricks_won < trick_goal:
+        if len(trick.trick_cards) == 0 and tricks_won < trick_goal:
             # Trick Winning strategy
             return self._pick_winning_card(hand, trump_suite)
 

@@ -1,7 +1,7 @@
 import pytest
 
 from src.core.deck import Deck
-from src.core import WizardBasePlayer
+from src.core.player import WizardBasePlayer
 from src.game.wizard_card import WizardCard, CardType, CardSuit
 
 

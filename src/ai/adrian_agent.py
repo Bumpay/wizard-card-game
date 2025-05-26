@@ -32,7 +32,7 @@ class WizardAdrianPlayerV01(WizardBasePlayer):
             # Trick Winning strategy
             return self._pick_winning_card(hand, trump_suite)
 
-        return valid_cards(hand, state.current_trick.trick_cards, state.current_trick.trick_suit)[0]
+        return valid_cards(list(hand), state.current_trick.trick_cards, state.current_trick.trick_suit)[0]
 
     def pick_trump_suit(self, state) -> CardSuit:
         hand = state.hand
@@ -70,7 +70,7 @@ class WizardAdrianPlayerV01(WizardBasePlayer):
         elif card.card_suit == state.trump_suit:
             winning_cards = 4 + 13 - card.card_value    # Wizard and higher trump cards are better
         else:
-            winning_cards = (4 + 13 - 1) # Wizards + Trump Cards - 1 that's been flipped
+            winning_cards = (4 + 13 - 1) # Wizards and Trump Cards - 1 that's been flipped
             if state.players.index(self) == 0:
                 winning_cards += 13 - card.card_value
             else:
