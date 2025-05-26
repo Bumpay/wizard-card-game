@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from copy import deepcopy
 from dataclasses import dataclass
 from types import MappingProxyType
 from typing import TYPE_CHECKING, Mapping
@@ -32,7 +31,7 @@ class GameState:
             current_scores=MappingProxyType(dict(game.current_scores)),
             current_bets=MappingProxyType(dict(game.current_round.current_bets)),
             trump_suit=game.current_round.trump_suit,
-            current_trick=deepcopy(game.current_round.current_trick),
+            current_trick=game.current_round.current_trick,
             won_tricks=MappingProxyType(dict(game.current_round.won_tricks)),
-            hand=tuple(deepcopy(game.current_round.hands[player]))
+            hand=tuple(game.current_round.hands[player])
         )
