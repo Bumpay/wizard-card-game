@@ -1,5 +1,5 @@
-from game.game_state import GameState
-from game.wizard_card import WizardCard, CardSuit
+from src.game.game_state import GameState
+from src.game.wizard_card import WizardCard, CardSuit
 
 
 class WizardBasePlayer:

@@ -3,13 +3,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Mapping
 
-from core.trick import Trick
+from src.core.trick import Trick
 from .wizard_card import WizardCard, CardSuit
 
 if TYPE_CHECKING:
-    from game.wizard_game import WizardGame
-    from core.player import WizardBasePlayer
-    from core.round import Round
+    from src.game.wizard_game import WizardGame
+    from src.core.player import WizardBasePlayer
 
 
 @dataclass(frozen=True)

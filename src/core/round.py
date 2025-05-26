@@ -1,8 +1,8 @@
-from core.player import WizardBasePlayer
-from core.deck import Deck
-from core.trick import Trick
-from game.wizard_card import WizardCard
-from game.wizard_card_factory import create_wizard_cards
+from src.core.player import WizardBasePlayer
+from src.core.deck import Deck
+from src.core.trick import Trick
+from src.game.wizard_card import WizardCard
+from src.game.wizard_card_factory import create_wizard_cards
 
 
 class Round:

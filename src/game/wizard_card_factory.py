@@ -1,4 +1,4 @@
-from game.wizard_card import WizardCard, CardType, CardSuit
+from src.game.wizard_card import WizardCard, CardType, CardSuit
 
 def create_wizard_cards() -> list[WizardCard]:
     normal_cards = [

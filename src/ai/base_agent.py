@@ -1,8 +1,8 @@
 import random
 
-from core.player import WizardBasePlayer
-from core.turn import valid_cards
-from game.wizard_card import CardSuit, WizardCard
+from src.core.player import WizardBasePlayer
+from src.core.turn import valid_cards
+from src.game.wizard_card import CardSuit, WizardCard
 
 class WizardDebugPlayer(WizardBasePlayer):
     def make_bid(self, state) -> int:

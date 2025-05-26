@@ -1,8 +1,8 @@
 import pytest
 
-from core.deck import Deck
-from core.player import WizardBasePlayer
-from game.wizard_card import WizardCard, CardType, CardSuit
+from src.core.deck import Deck
+from src.core import WizardBasePlayer
+from src.game.wizard_card import WizardCard, CardType, CardSuit
 
 
 class DummyPlayer(WizardBasePlayer):

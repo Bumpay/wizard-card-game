@@ -1,6 +1,6 @@
 from enum import Enum
 
-from core.card import Card
+from src.core.card import Card
 
 
 class CardSuit(Enum):

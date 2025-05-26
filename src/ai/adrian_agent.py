@@ -1,10 +1,10 @@
 import random
 from collections import Counter
 
-from core.turn import valid_cards
-from game.game_state import GameState
-from game.wizard_card import CardSuit, CardType, WizardCard
-from core.player import WizardBasePlayer
+from src.core.turn import valid_cards
+from src.game.game_state import GameState
+from src.game.wizard_card import CardSuit, CardType, WizardCard
+from src.core.player import WizardBasePlayer
 
 
 class WizardAdrianPlayerV01(WizardBasePlayer):

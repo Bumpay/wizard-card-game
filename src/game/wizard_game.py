@@ -1,11 +1,11 @@
 import random
 
-from core.deck import Deck
-from core.player import WizardBasePlayer
-from core.round import Round
-from core.trick import Trick
-from game.game_state import GameState
-from game.wizard_card_factory import create_wizard_cards
+from src.core.deck import Deck
+from src.core.player import WizardBasePlayer
+from src.core.round import Round
+from src.core.trick import Trick
+from src.game.game_state import GameState
+from src.game.wizard_card_factory import create_wizard_cards
 
 
 class WizardGame:

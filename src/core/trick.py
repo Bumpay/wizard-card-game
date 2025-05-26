@@ -1,12 +1,12 @@
 from __future__ import annotations
 from typing import Callable, TYPE_CHECKING
 
-from core.turn import Turn
-from game.wizard_card import WizardCard, CardSuit, CardType
+from src.core.turn import Turn
+from src.game.wizard_card import WizardCard, CardSuit, CardType
 
 if TYPE_CHECKING:
-    from core.player import WizardBasePlayer
-    from game.game_state import GameState
+    from src.core.player import WizardBasePlayer
+    from src.game.game_state import GameState
 
 
 class Trick:

@@ -1,8 +1,8 @@
 import random
 
 from typing import Self
-from core.player import WizardBasePlayer
-from game.wizard_card import WizardCard
+from src.core.player import WizardBasePlayer
+from src.game.wizard_card import WizardCard
 
 class Deck:
     def __init__(self, cards: list[WizardCard]):

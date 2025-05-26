@@ -1,8 +1,8 @@
 import random
 from collections import Counter
 
-from game.wizard_card import CardSuit, CardType, WizardCard
-from core.player import WizardBasePlayer
+from src.game.wizard_card import CardSuit, CardType, WizardCard
+from src.core.player import WizardBasePlayer
 
 
 class WizardSimpleBot(WizardBasePlayer):
