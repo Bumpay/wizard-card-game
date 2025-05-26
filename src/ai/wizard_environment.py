@@ -13,8 +13,7 @@ class WizardEnvironment:
     def evaluate_players(
             self,
             player_classes: list[Type[WizardBasePlayer]],
-            num_games: int = 100,
-            players_per_game: int = 4
+            num_games: int = 100
     ) -> dict[str, dict]:
         """
         Evaluate multiple AI players over several games.
@@ -23,7 +22,7 @@ class WizardEnvironment:
         :param num_games: Number of games to play
         :param players_per_game: Number of players in each game
         """
-        if not 3 <= players_per_game <= 6:
+        if not 3 <= len(player_classes) <= 6:
             raise ValueError('Number of players must be between 3 and 6')
 
         # Initialize statistics tracking
@@ -35,8 +34,8 @@ class WizardEnvironment:
                 'scores': [],
                 'average_position': 0,
                 'positions': [],
-                'round_wins': {i: 0 for i in range(1, 21)},  # Track wins for each round 1-20
-                'round_plays': {i: 0 for i in range(1, 21)}  # Track how many times each round was played
+                'bets_placed': {i: 0 for i in range(1, 21)},  # Track wins for each round 1-20
+                'right_bets': {i: 0 for i in range(1, 21)}  # Track how many times each round was played
             }
             for player_class in player_classes
         }
@@ -48,9 +47,9 @@ class WizardEnvironment:
 
             # Create players for this game
             game_players = []
-            for i in range(players_per_game):
-                player_class = np.random.choice(player_classes)
-                player = player_class(f'{player_class.__name__ }_{i}')
+            for p_class in player_classes:
+                # player_class = np.random.choice(player_classes)
+                player = p_class(f'{p_class.__name__ }')
                 game_players.append(player)
                 game.add_player(player)
 
@@ -91,9 +90,9 @@ class WizardEnvironment:
                 stats['wins'] += 1
 
             for round_num, round_results in round_scores.items():
-                stats['round_plays'][round_num] += 1
-                if round_results[player] == max(round_results.values()):
-                    stats['round_wins'][round_num] += 1
+                stats['bets_placed'][round_num] += 1
+                if round_results[player] > 0:
+                    stats['right_bets'][round_num] += 1
 
     def _calculate_final_stats(self, num_games: int):
         """Calculate final statistics for all players"""
@@ -123,13 +122,13 @@ class WizardEnvironment:
             for pos, freq in enumerate(stats['position_distribution'], 1):
                 print(f"  {pos}th: {freq:.2%}")
 
-            print('\nRound Win Rates:')
+            print('\nRound Correct Bets:')
             for round_num in range(1, 21):
-                plays = stats['round_plays'][round_num]
-                wins = stats['round_wins'][round_num]
-                if plays > 0:
-                    win_rate = wins / plays
-                    print(f"  Round {round_num}: {win_rate:.2%} ({wins} / {plays})")
+                placed_bets = stats['bets_placed'][round_num]
+                right_bets = stats['right_bets'][round_num]
+                if placed_bets > 0:
+                    correct_bet_percentage = right_bets / placed_bets
+                    print(f"  Round {round_num}: {correct_bet_percentage:.2%} ({right_bets} / {placed_bets})")
                 else:
                     print(f"Round {round_num}: No plays")
 
