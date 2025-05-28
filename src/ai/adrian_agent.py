@@ -8,6 +8,11 @@ from src.core.player import WizardBasePlayer
 
 
 class WizardAdrianPlayerV01(WizardBasePlayer):
+    def __init__(self, name: str):
+        super().__init__(name)
+        self._tricks_won = None
+        self._trick_goal = None
+
     def make_bid(self, state) -> int:
         bid = 0
         hand = state.hand
@@ -21,19 +26,21 @@ class WizardAdrianPlayerV01(WizardBasePlayer):
 
         if state.current_round_number == 20:
             bid += len([c for c in hand if c.card_value and c.card_value >= 10])
+        else:
+            bid += len([c for c in hand if c.card_value == 13 and c.card_suit != state.trump_suit])
 
         return min(bid, state.current_round_number)
 
     def play_card(self, state: GameState) -> WizardCard:
         trick = state.current_trick
-        trick_goal = state.current_bets[self]
-        tricks_won = state.won_tricks[self]
+        self._trick_goal = state.current_bets[self]
+        self._tricks_won = state.won_tricks[self]
         hand = state.hand
         trump_suite = state.trump_suit
 
-        if len(trick.trick_cards) == 0 and tricks_won < trick_goal:
+        if len(trick.trick_cards) == 0 and self._tricks_won < self._trick_goal:
             # Trick Winning strategy
-            return self._pick_winning_card(hand, trump_suite)
+            return self._pick_winning_card(hand, trump_suite, trick)
 
         return valid_cards(list(hand), state.current_trick.trick_cards, state.current_trick.trick_suit)[0]
 
@@ -43,19 +50,34 @@ class WizardAdrianPlayerV01(WizardBasePlayer):
         most_suits = Counter(card.card_suit for card in hand).most_common(1)
         return most_suits[0][0] if most_suits else random.choice(list(CardSuit))
 
-    def _pick_winning_card(self, hand, trump_suit):
+    def _pick_winning_card(self, hand, trump_suit, trick):
         wizard_card = next((card for card in hand if card.card_type == CardType.WIZARD), None)
         highest_trump_card = max([card for card in hand if trump_suit and card.card_suit == trump_suit], key=lambda c: c.card_value, default=None)
         highest_non_trump_card = max([card for card in hand if card.card_type == CardType.STANDARD and card.card_suit != trump_suit], key=lambda c: c.card_value, default=None)
 
-        if wizard_card:
-            return wizard_card
-        elif highest_trump_card:
-            return highest_trump_card
-        elif highest_non_trump_card:
-            return highest_non_trump_card
+        if len(trick.trick_cards) == 0:
+            if wizard_card:
+                return wizard_card
+            elif highest_trump_card:
+                return highest_trump_card
+            elif highest_non_trump_card:
+                return highest_non_trump_card
+            else:
+                return hand[0]
         else:
-            return hand[0]
+            first_trick_card = trick.trick_cards[0]
+            high_card = max(hand, key=lambda c: c.card_value)
+            low_card = min(hand, key=lambda c: c.card_value)
+
+            if first_trick_card.card_type == CardType.WIZARD:
+                if self._tricks_won < self._trick_goal:
+                    return low_card
+                else:
+                    return high_card
+            else:
+                return (c for c in hand if c.card_suit == trick.trick_suit)
+
+
 
     def expected_value(self, state):
         card = state.hand[0]
