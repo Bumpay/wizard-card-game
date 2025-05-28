@@ -15,6 +15,7 @@ class WizardGame:
         self.logger = logging.getLogger(__name__)
         self._current_scores: dict[WizardBasePlayer, int] = dict()
         self._round_scores = {}
+        self._bets_history = {}
         self._deck: Deck = Deck(create_wizard_cards())
         self._players: list[WizardBasePlayer] = list()
         self._current_round: Round | None = None
@@ -60,6 +61,14 @@ class WizardGame:
         round_scores = self._current_round.play()
         self.logger.info(f'Round {round_number}: End bidding')
 
+        self._bets_history[round_number] = {
+            player: {
+                'bet': self._current_round.current_bets[player],
+                'diff': self._current_round.won_tricks[player] - self._current_round.current_bets[player]
+            }
+        for player in self._players
+        }
+
         self._round_scores[round_number] = round_scores
 
         self._current_scores = {
@@ -99,3 +108,7 @@ class WizardGame:
     @property
     def round_scores(self):
         return self._round_scores
+
+    @property
+    def bets_history(self):
+        return self._bets_history

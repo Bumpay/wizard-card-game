@@ -1,5 +1,6 @@
 from typing import List, Type
 import matplotlib.pyplot as plt
+import numpy as np
 
 from src.ai.debug_agent import WizardDebugPlayer
 from src.ai.simple_agent import WizardSimpleBot
@@ -22,6 +23,8 @@ def run_evaluation(player_classes: List[Type], num_games: int):
     env.print_results()
 
     plot_bet_accuracy(results, 'bet_accuracy.png')
+    env.plot_betting_patterns('betting_patterns.png')
+    env.plot_score_distributions('score_distributions.png')
     return results
 
 
@@ -61,13 +64,12 @@ def plot_bet_accuracy(stats: dict, save_path: str = None):
         plt.savefig(save_path)
     plt.show()
 
-
 def main():
     setup_logging()
 
     # Run the evaluation
-    results = run_evaluation(
-        player_classes=[WizardSimpleBot, WizardDebugPlayer, WizardAdrianPlayerV01],
+    run_evaluation(
+        player_classes=[WizardAdrianPlayerV01, WizardDebugPlayer, WizardSimpleBot],
         num_games=10000
     )
 
