@@ -39,7 +39,6 @@ class Turn:
             raise ValueError(f'{self._player.name} played an invalid card')
 
         self._hand.remove(chosen_card)
-        self._trick_cards[self._player] = chosen_card
         self._played_card = chosen_card
 
         if self._trick_suit is None and chosen_card.card_type == CardType.STANDARD:

@@ -103,7 +103,7 @@ class TestRound:
             mock_trick = MockTrick.return_value
             mock_trick.play.return_value = mock_players[0]
 
-            winner = round_instance.play_trick()
+            winner = round_instance.play_trick(mock_players[0])
 
             # Verify Trick was created with the correct parameters
             MockTrick.assert_called_once_with(

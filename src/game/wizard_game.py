@@ -3,7 +3,7 @@ import random
 from types import MappingProxyType
 
 from src.core.deck import Deck
-from src.core.player import WizardBasePlayer
+from src.core.player import WizardBasePlayer, rotate_players
 from src.core.round import Round
 from src.core.trick import Trick
 from src.game.game_state import GameState
@@ -75,6 +75,8 @@ class WizardGame:
             player: self._current_scores.get(player, 0) + round_scores.get(player, 0)
             for player in set(self._current_scores) | set(round_scores)
         }
+
+        self._players = rotate_players(self._players, self._players[1])
 
     def end_game(self):
 

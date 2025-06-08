@@ -1,6 +1,6 @@
 import logging
 
-from src.core.player import WizardBasePlayer
+from src.core.player import WizardBasePlayer, rotate_players
 from src.core.deck import Deck
 from src.core.trick import Trick
 from src.game.wizard_card import WizardCard
@@ -35,7 +35,7 @@ class Round:
 
         for i in range(self._round_number):
             self.logger.info(f'\nTrick {i + 1} of {self._round_number}')
-            winner = self.play_trick()
+            winner = self.play_trick(self._trick_starting_player)
 
             self._won_tricks[winner] += 1
             self._trick_starting_player = winner
@@ -51,9 +51,9 @@ class Round:
             self.logger.info(f'{player.name}: I bet {decision}')
             self._current_bets[player] = decision
 
-    def play_trick(self) -> WizardBasePlayer:
+    def play_trick(self, starting_player) -> WizardBasePlayer:
         self._current_trick = Trick(
-            self._players.copy(),
+            rotate_players(self._players, starting_player).copy(),
             self._hands,
             self.trump_suit,
             self._game_state_callback
@@ -94,3 +94,7 @@ class Round:
     @property
     def round_number(self):
         return self._round_number
+
+    @property
+    def trump_card(self):
+        return self._trump_card

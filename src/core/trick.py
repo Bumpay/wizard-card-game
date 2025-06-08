@@ -38,9 +38,13 @@ class Trick:
                 self._get_game_state,
             )
             card = turn.play()
-            self._trick_cards[player] = card
-            if not self._trick_suit and card.card_type == CardType.STANDARD:
+
+            # Set trick suit logic
+            if not self._trick_suit and all(c.card_type == CardType.JESTER for c in self._trick_cards.values()) and card.card_type == CardType.STANDARD:
                 self._trick_suit = card.card_suit
+
+
+            self._trick_cards[player] = card
             self.logger.info(f'{player.name}: I play a {card}')
 
         winner = self.determine_winner()

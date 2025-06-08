@@ -1,15 +1,24 @@
 from typing import List, Type
 import matplotlib.pyplot as plt
-import numpy as np
 
 from src.ai.debug_agent import WizardDebugPlayer
 from src.ai.simple_agent import WizardSimpleBot
+from src.ai.terminal_player import ConsoleHumanPlayer
 from src.ai.wizard_environment import WizardEnvironment
 from src.ai.adrian_agent import WizardAdrianPlayerV01
 
 import logging
 
+from src.game.wizard_game import WizardGame
+
+
 def setup_logging():
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%H:%M:%S'
+    )
+
     logging.getLogger('src.game.wizard_game').setLevel(logging.WARNING)
     logging.getLogger('src.core.round').setLevel(logging.WARNING)
     logging.getLogger('src.core.trick').setLevel(logging.WARNING)
@@ -64,14 +73,32 @@ def plot_bet_accuracy(stats: dict, save_path: str = None):
         plt.savefig(save_path)
     plt.show()
 
+def run_single_game():
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        datefmt='%H:%M:%S'
+    )
+
+    logging.getLogger('src.game.wizard_game').setLevel(logging.INFO)
+    logging.getLogger('src.core.round').setLevel(logging.INFO)
+    logging.getLogger('src.core.trick').setLevel(logging.INFO)
+
+    game = WizardGame()
+    game.add_player(WizardAdrianPlayerV01('Adrian'))
+    game.add_player(WizardSimpleBot('Bot'))
+    game.add_player(ConsoleHumanPlayer('Me'))
+    game.start_game()
+
 def main():
     setup_logging()
 
     # Run the evaluation
     run_evaluation(
-        player_classes=[WizardAdrianPlayerV01, WizardDebugPlayer, WizardSimpleBot],
+        player_classes=[WizardAdrianPlayerV01, WizardSimpleBot, WizardSimpleBot],
         num_games=10000
     )
 
 if __name__ == '__main__':
     main()
+    #run_single_game()

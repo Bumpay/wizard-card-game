@@ -18,6 +18,7 @@ class GameState:
     current_round_number: int
     current_scores: Mapping[WizardBasePlayer, int]
     current_bets: Mapping[WizardBasePlayer, int]
+    trump_card: WizardCard | None
     trump_suit: CardSuit
     current_trick: Trick
     won_tricks: Mapping[WizardBasePlayer, int]
@@ -30,6 +31,7 @@ class GameState:
             current_round_number=game.current_round.round_number,
             current_scores=MappingProxyType(dict(game.current_scores)),
             current_bets=MappingProxyType(dict(game.current_round.current_bets)),
+            trump_card=game.current_round.trump_card,
             trump_suit=game.current_round.trump_suit,
             current_trick=game.current_round.current_trick,
             won_tricks=MappingProxyType(dict(game.current_round.won_tricks)),
